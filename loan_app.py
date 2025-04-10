@@ -105,33 +105,33 @@ elif app_mode == 'Prediction':
     single_sample = np.array(feature_list).reshape(1,-1)
 
     if st.button("Predict"):
-    # Load GIFs
-    file_ = open("6m-rain.gif", "rb")
-    contents = file_.read()
-    data_url = base64.b64encode(contents).decode("utf-8")
-    file_.close()
-
-    file = open("green-cola-no.gif", "rb")
-    contents = file.read()
-    data_url_no = base64.b64encode(contents).decode("utf-8")
-    file.close()
-
-    # Load model and predict
-    loaded_model = pickle.load(open('RF.sav', 'rb'))
-    prediction = loaded_model.predict(single_sample)
-
-    # Show results
-    if prediction[0] == 0:
-        st.error("According to our Calculations, you will not get the loan from Bank")
-        st.markdown(
-            f'<img src="data:image/gif;base64,{data_url_no}" alt="no gif">',
-            unsafe_allow_html=True
-        )
-    elif prediction[0] == 1:
-        st.success("Congratulations!! You will get the loan from Bank")
-        st.markdown(
-            f'<img src="data:image/gif;base64,{data_url}" alt="yes gif">',
-            unsafe_allow_html=True
-        )
+        # Load GIFs
+        file_ = open("6m-rain.gif", "rb")
+        contents = file_.read()
+        data_url = base64.b64encode(contents).decode("utf-8")
+        file_.close()
+    
+        file = open("green-cola-no.gif", "rb")
+        contents = file.read()
+        data_url_no = base64.b64encode(contents).decode("utf-8")
+        file.close()
+    
+        # Load model and predict
+        loaded_model = pickle.load(open('RF.sav', 'rb'))
+        prediction = loaded_model.predict(single_sample)
+    
+        # Show results
+        if prediction[0] == 0:
+            st.error("According to our Calculations, you will not get the loan from Bank")
+            st.markdown(
+                f'<img src="data:image/gif;base64,{data_url_no}" alt="no gif">',
+                unsafe_allow_html=True
+            )
+        elif prediction[0] == 1:
+            st.success("Congratulations!! You will get the loan from Bank")
+            st.markdown(
+                f'<img src="data:image/gif;base64,{data_url}" alt="yes gif">',
+                unsafe_allow_html=True
+            )
 
 
