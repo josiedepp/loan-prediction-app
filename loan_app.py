@@ -39,15 +39,15 @@ if app_mode == 'Home':
 
 elif app_mode == 'Prediction':
     st.subheader("Sir/Mme, YOU need to fill all necessary information in order to get a reply to your loan request!")
-
+    
     st.sidebar.header("Informations about the client :")
-
+    
     # Dictionaries to map input values
     gender_dict = {"Male": 1, "Female": 2}
     feature_dict = {"No": 1, "Yes": 2}
     edu = {"Graduate": 1, "Not Graduate": 2}
     prop = {"Rural": 1, "Urban": 2, "Semiurban": 3}
-
+    
     # Sidebar inputs
     gender_dict = {"Male":1,"Female":2}
     feature_dict = {"No":1,"Yes":2}
@@ -65,7 +65,7 @@ elif app_mode == 'Prediction':
     Dependents=st.sidebar.radio('Dependents',options=['0','1' , '2' , '3+'])
     Education=st.sidebar.radio('Education',tuple(edu.keys()))
     Property_Area = st.sidebar.radio('Property Area', tuple(prop.keys()))
-
+    
     # Convert Dependents into dummy variables
     class_0, class_1, class_2, class_3 = 0, 0, 0, 0
     if Dependents == '0':
@@ -76,7 +76,7 @@ elif app_mode == 'Prediction':
         class_2 = 1
     elif Dependents == '3+':
         class_3 = 1
-
+    
     # Convert Property_Area into dummy variables
     Rural, Urban, Semiurban = 0.0, 0.0, 0.0
     if Property_Area == 'Urban':
@@ -85,7 +85,7 @@ elif app_mode == 'Prediction':
         Semiurban = 1.0
     else:
         Rural = 1.0
-
+    
     data1={
     'Gender':Gender,
     'Married':Married,
@@ -99,39 +99,39 @@ elif app_mode == 'Prediction':
     'Credit_History':Credit_History,
     'Property_Area':[Rural,Urban,Semiurban],
     }
-
+    
     feature_list=[ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,Credit_History,get_value(Gender,gender_dict),get_fvalue(Married),data1['Dependents'][0],data1['Dependents'][1],data1['Dependents'][2],data1['Dependents'][3],get_value(Education,edu),get_fvalue(Self_Employed),data1['Property_Area'][0],data1['Property_Area'][1],data1['Property_Area'][2]]
-
+    
     single_sample = np.array(feature_list).reshape(1,-1)
-
+    
     if st.button("Predict"):
         file_ = open("6m-rain.gif", "rb")
         contents = file_.read()
         data_url = base64.b64encode(contents).decode("utf-8")
         file_.close()
-   
+    
         file = open("green-cola-no.gif", "rb")
         contents = file.read()
         data_url_no = base64.b64encode(contents).decode("utf-8")
         file.close()
-   
-   
+    
+    
         loaded_model = pickle.load(open('RF.sav', 'rb'))
         prediction = loaded_model.predict(single_sample)
         if prediction[0] == 0 :
             st.error(
-    'According to our Calculations, you will not get the loan from Bank'
-    )
+            'According to our Calculations, you will not get the loan from Bank'
+            )
             st.markdown(
-    f'<img src="data:image/gif;base64,{data_url_no}" alt="cat gif">',
-    unsafe_allow_html=True,)
+            f'<img src="data:image/gif;base64,{data_url_no}" alt="cat gif">',
+            unsafe_allow_html=True,)
         elif prediction[0] == 1 :
             st.success(
-    'Congratulations!! you will get the loan from Bank'
-    )
+            'Congratulations!! you will get the loan from Bank'
+            )
             st.markdown(
-    f'<img src="data:image/gif;base64,{data_url}" alt="cat gif">',
-    unsafe_allow_html=True,
-    )
+            f'<img src="data:image/gif;base64,{data_url}" alt="cat gif">',
+            unsafe_allow_html=True,
+            )
 
 
